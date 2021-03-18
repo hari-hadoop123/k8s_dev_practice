@@ -1,0 +1,32 @@
+nc -z -v -w 1 secure-service 80
+
+k create ns dvl1987
+
+k config set-context --current --namespace dvl1987
+
+k run --generator=run-pod/v1 time-check --image=busybox --dry-run -n dvl1987 -o yaml > pod.yaml
+
+
+k create configmap time-config --from-literal=TIME_FREQ=10
+
+
+k create deploy nginx-deploy --image=nginx:1.16 --replicas=4 
+
+
+k set resources deployment redis -c redis --limits=cpu=0.2
+
+
+k create deployment nginx-deploy --image=nginx:1.16 --dry-run -o yaml > deploy.yaml
+
+
+k create cronjob dice --image=kodekloud/throw-dice --schedule="*/1 * * * *"
+
+
+add taint:
+
+k taint node node01 app_type=alpha:NoSchedule
+
+
+k taint nodes node01 app_type=alpha:NoSchedule
+
+
